@@ -1,9 +1,18 @@
-import { compare, genSalt, hash } from 'bcryptjs'
-import { sign } from 'jsonwebtoken'
+import bcryptjs from 'bcryptjs'
+import jsonwebtoken from 'jsonwebtoken'
 import { JWT_SECRET } from '../config.js'
 import { getUserDetailsFromToken } from '../helpers/getUserDetailsFromToken.js'
 import User from '../models/user.js'
 
+/**
+ * Handles user registration by checking for missing fields,
+ * existing email, hashing the password, and saving the user data.
+ * @param req - Receive user data such as name, email
+ * @param res - Is the response object that will be sent back to the
+ *  client making the request.
+ * @returns Returns different responses based on the conditions met
+ * during the registration process.
+ */
 export const register = async (req, res) => {
   try {
     const { name, email, password, image } = req.body
@@ -22,8 +31,8 @@ export const register = async (req, res) => {
         .json({ message: 'Email already exists', error: true })
     }
 
-    const salt = await genSalt(10)
-    const hashPassword = await hash(password, salt)
+    const salt = await bcryptjs.genSalt(10)
+    const hashPassword = await bcryptjs.hash(password, salt)
 
     const newUser = new User({
       name,
@@ -92,7 +101,9 @@ export const checkEmail = async (req, res) => {
 
     const checkEmail = await User.findOne({ email }).select('-password')
 
-    if (!checkEmail) { return res.status(400).json({ message: 'Email not found', error: true }) }
+    if (!checkEmail) {
+      return res.status(400).json({ message: 'Email not found', error: true })
+    }
 
     return res
       .status(200)
@@ -110,7 +121,7 @@ export const checkPassword = async (req, res) => {
 
     const user = await User.findById(userId)
 
-    const verifyPassword = await compare(password, user.password)
+    const verifyPassword = await bcryptjs.compare(password, user.password)
 
     if (!verifyPassword) {
       return res
@@ -118,9 +129,13 @@ export const checkPassword = async (req, res) => {
         .json({ message: 'Password incorrect', error: true })
     }
 
-    const token = await sign({ id: user._id, email: user.email }, JWT_SECRET, {
-      expiresIn: '1d'
-    })
+    const token = await jsonwebtoken.sign(
+      { id: user._id, email: user.email },
+      JWT_SECRET,
+      {
+        expiresIn: '1d'
+      }
+    )
 
     return res
       .cookie('token', token, { http: true, secure: true })
