@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
+import uploadFile from '../helpers/uploadFile'
 
 const Register = () => {
   const [data, setData] = useState({
@@ -28,8 +29,8 @@ const Register = () => {
 
   const handleUploadPhoto = async (event) => {
     const file = event.target.files[0]
-    // const uploadPhoto = await uploadFile(file)
-    const uploadPhoto = ""
+    const uploadPhoto = await uploadFile(file)
+    // const uploadPhoto = ""
 
     setUploadPhoto(file)
 
