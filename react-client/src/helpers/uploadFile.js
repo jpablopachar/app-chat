@@ -4,7 +4,7 @@ const uploadFile = async (file) => {
   const formData = new FormData()
 
   formData.append('file', file)
-  formData.append('upload_preset', 'profiles')
+  formData.append('upload_preset', 'app-chat')
 
   const response = await fetch(url, {
     method: 'post',

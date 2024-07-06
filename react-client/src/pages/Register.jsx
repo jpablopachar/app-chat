@@ -53,9 +53,11 @@ const Register = () => {
     event.preventDefault()
     event.stopPropagation()
 
+    const URL = `${import.meta.env.VITE_SERVER_URL}/api/register`
+
     try {
       const res = await axios.post(URL, data)
-      console.log(res)
+
       toast.success(res.data.message)
 
       if (res.data.success) {
