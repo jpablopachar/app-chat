@@ -11,7 +11,14 @@ const app = express()
 
 const server = http.createServer(app)
 
-const io = new Server(server)
+const io = new Server(server, {
+  cors: {
+    origin: (origin, callback) => {
+      callback(null, true)
+    },
+    credentials: true
+  }
+})
 
 const onlineUser = new Set()
 

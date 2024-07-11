@@ -34,7 +34,7 @@ const CheckEmail = () => {
       if (res.data.success) {
         setData({ email: '' })
 
-        navigate('/password', { state: res?.data?.message })
+        navigate('/password', { state: res?.data?.data })
       }
     } catch (error) {
       toast.error(error?.response?.data?.message)

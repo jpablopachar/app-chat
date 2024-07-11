@@ -1,15 +1,18 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-// import { useDispatch } from 'react-redux'
+import { PiUserCircle } from 'react-icons/pi'
+import { useDispatch } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import Avatar from '../components/Avatar.jsx'
+import { setToken } from '../redux/userSlice.js'
 
 const CheckPassword = () => {
   const [data, setData] = useState({ password: '', userId: '' })
 
   const navigate = useNavigate()
   const location = useLocation()
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!location?.state?.name) navigate('/email')
@@ -46,7 +49,8 @@ const CheckPassword = () => {
       toast.success(res?.data?.message)
 
       if (res.data.success) {
-        // dispatch(setToken)
+        dispatch(setToken)
+
         localStorage.setItem('token', res?.data?.token)
 
         setData({ password: '' })
@@ -62,14 +66,12 @@ const CheckPassword = () => {
     <div className="mt-5">
       <div className="bg-white w-full max-w-md  rounded overflow-hidden p-4 mx-auto">
         <div className="w-fit mx-auto mb-2 flex justify-center items-center flex-col">
-          {/* <PiUserCircle
-                  size={80}
-                /> */}
+          {<PiUserCircle size={80} />}
           <Avatar
             width={70}
             height={70}
             name={location?.state?.name}
-            imageUrl={location?.state?.profile_pic}
+            imageUrl={location?.state?.image}
           />
           <h2 className="font-semibold text-lg mt-1">
             {location?.state?.name}

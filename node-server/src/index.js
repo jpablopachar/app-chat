@@ -8,13 +8,20 @@ import { connectDB } from './config/db.js'
 import { router } from './routes/index.js'
 import { app, server } from './socket/index.js'
 
+const corsOptions = {
+  origin: (origin, callback) => {
+    callback(null, true)
+  },
+  credentials: true
+}
+
 dotenv.config()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(morgan('dev'))
-app.use(cors())
+app.use(cors(corsOptions))
 app.use('/api', router)
 
 connectDB().then(() => {
