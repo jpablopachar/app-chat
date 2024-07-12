@@ -158,13 +158,13 @@ export const searchUser = async (req, res) => {
 
     const query = new RegExp(search, 'i', 'g')
 
-    const users = await User.find({
+    const user = await User.find({
       $or: [{ name: query }, { email: query }]
     }).select('-password')
 
     return res
       .status(200)
-      .json({ message: 'Users found', data: users, success: true })
+      .json({ message: 'Users found', data: user, success: true })
   } catch (error) {
     return res
       .status(500)
