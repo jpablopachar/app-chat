@@ -1,7 +1,6 @@
 import { PiUserCircle } from 'react-icons/pi'
 import { useSelector } from 'react-redux'
 
-// eslint-disable-next-line react/prop-types
 const Avatar = ({ userId, name, imageUrl, width, height }) => {
   const onlineUser = useSelector((state) => state?.user?.onlineUser)
 
